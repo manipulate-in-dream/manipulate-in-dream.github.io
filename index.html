@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="description"
@@ -108,6 +108,7 @@
             <span class="author-block">
               Zichen He<sup>3</sup>,
             </span>
+            <br>
             <span class="author-block">
               Yuzhen Liu<sup>1</sup>
             </span>
@@ -261,8 +262,11 @@
     </div>
   </div>
 </section> -->
-
-
+<style>
+  section {
+    margin-bottom: -50px; /* Adjust this value to reduce vertical spacing */
+  }
+</style>
 <section class="section">
   <div class="container is-max-desktop">
     <!-- Abstract. -->
@@ -271,7 +275,10 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            Video generation models (VGMs) offer a promising pathway for unified world modeling in robotics by integrating simulation, prediction, and manipulation. However, their practical application remains limited due to (1) slowgeneration speed, which limits real-time interaction, and (2) poor consistency between imagined videos and executable actions. To address these challenges, we propose <strong>Manipulate in Dream (MinD)</strong>, a hierarchical diffusion-based world model framework that employs a dual-system design for vision-language manipulation. MinD executes VGM at low frequencies to extract video prediction features, while leveraging a high-frequency diffusion policy for real-time interaction. This architecture enables low-latency, closed-loop control in manipulation with coherent visual guidance.
+            Video generation models (VGMs) offer a promising pathway for unified world modeling in robotics by integrating simulation, prediction, and manipulation. However, their practical application remains limited due to (1) slowgeneration speed, which limits real-time interaction, and (2) poor consistency between imagined videos and executable actions.
+          </p>
+          <p>
+            To address these challenges, we propose <strong>Manipulate in Dream (MinD)</strong>, a hierarchical diffusion-based world model framework that employs a dual-system design for vision-language manipulation. MinD executes VGM at low frequencies to extract video prediction features, while leveraging a high-frequency diffusion policy for real-time interaction. This architecture enables low-latency, closed-loop control in manipulation with coherent visual guidance.
           </p>
           <p>
             To better coordinate the two systems, we introduce a video-action diffusion matching module (DiffMatcher), with a novel co-training strategy that uses separate schedulers for each diffusion model. Specifically, we introduce a diffusion-forcing mechanism to DiffMatcher that aligns their intermediate representations during training, helping the fast action model better understand video-based predictions. Beyond manipulation, MinD also functions as a world simulator, reliably predicting task success or failure in latent space before execution. Trustworthy analysis further shows that VGMs can preemptively evaluate task feasibility and mitigate risks. Extensive experiments across multiple benchmarks demonstrate that MinD achieves state-of-the-art manipulation (63%+) in RL-Bench, advancing the frontier of unified world modeling in robotics.
@@ -282,15 +289,31 @@
     <!--/ Abstract. -->
 
     <!-- Paper video. -->
-    <!-- <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Video</h2>
-        <div class="publication-video">
-          <iframe src="https://www.youtube.com/embed/MrKrnHhk8IA?rel=0&amp;showinfo=0"
-                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+      <div class="container is-max-desktop">
+        <h2 class="title is-3">Overview</h2>
+        <div class="publication-image">
+          <img src="./static/images/method_main.jpg" alt="Overview Image" style="width:100%;"/>
         </div>
       </div>
-    </div> -->
+      <div class="content has-text-justified">
+        <p>MinD is a general-purpose multimodal world model for robotic manipulation that integrates visual imagination and action planning. Its core consists of a hierarchical diffusion-based framework with three components:
+        </p>
+        <ol>
+          <li><b>LoDiff-Visual (Slow System):</b> Generates a sequence of future visual observations at a low temporal frequency
+            using a latent diffusion model, focusing on long-horizon imagination.</li>
+          <li><b>HiDiff-Policy (Fast System):</b> Predicts high-frequency action sequences from the generated video rollout
+            using a high-frequency diffusion transformer, ensuring real-time responsiveness.</li>
+          <li><b>Video-Action DiffMatcher:</b> A temporal alignment module that bridges the asynchronous generation by
+            converting latent video tensors into temporally-aware visual tokens, which then condition the HiDiff-Policy.</li>
+        </ol>
+        <p>During inference, LoDiff-Visual forward-simulates noisy visual latents, which DiffMatcher transforms into aligned
+          features to condition HiDiff-Policy for action generation. The system is trained with a dual-scheduler co-training
+          strategy, optimizing a total objective that includes a video loss, an action loss, and a regularization loss for
+          DiffMatcher (to enforce consistency between noisy and clean visual features), ensuring robust performance across
+          asynchronous temporal scales and imperfect inputs.
+        </p>
+        </div>
+    </div>
     <!--/ Paper video. -->
   </div>
 </section>
