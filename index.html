@@ -323,7 +323,16 @@
   <div class="container is-max-desktop">
     <div class="column is-full-width">
       <h3 class="title is-3" style="margin-top: -30pt;">Experimental Results</h3>
-
+      <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="9%"></td>
+          <td width="82%">
+            <img src="./static/images/exp_main.jpg" />
+            <p class="has-text-centered" style="margin-top: -0.5em;"> Comparison of video generation result from LoDiff-Visual against real execution observation of HiDiff-Policy of RL-Bench and real-world Franka. </p>
+          </td>
+          <td width="9%"></td>
+        </tr>
+      </table>
       <h3 class="title is-4">Evaluation on RL-Bench</h3>
       <div class="content has-text-justified has-text-centered">
         <p>
@@ -342,15 +351,15 @@
           </tr>
         </table>
         <p>
-            The results show that MinD outperforms all the existing VLA models, especially in tasks requiring complex temporal reasoning, such as "<b>Sweep to Dustpan</b>" (<span style="font-weight:bold;">96%</span>) and "<b>Close Laptop Lid</b>" (<span style="font-weight:bold;">68%</span>), highlighting the strong capability of video generation models as the foundational backbone for comprehensive visual-language manipulations.
+            The results show that MinD outperforms all the existing VLA models, especially in tasks requiring complex temporal reasoning, such as "<b>Sweep to Dustpan</b>" (<span style="font-weight:bold;">96%</span>) and "<b>Close Laptop Lid</b>" (<span style="font-weight:bold;">68%</span>), highlighting the strong capability of video generation models as the foundational backbone for comprehensive visual-language manipulations. Besides, MinD also achieves the highest inference speed of <b>11.3</b> FPS, showcasing its superior efficiency.
         </p>
       </div>
 
       <h3 class="title is-4">Real-world Evaluation with Franka Research 3 Robot</h3>
       <div class="content has-text-justified has-text-centered">
         <p>
-            We evaluate MinD with a <a href="https://franka.de/franka-research-3" target="_blank">Franka Research 3 Robot</a> to perform 4 real-world tasks: 1) pick and place, 2) unplug the charger, 3)
-            pour water, 4) wipe the whiteboard. We collected a dataset with 100 human demonstration trajectories via teleoperation using a SpaceMouse. As shown in the table below, our model achieves competitive performance across all tasks, with notable strengths in tasks requiring precise manipulation, such as pick and place(60%) and wiping the whiteboard (65%).
+          We evaluate MinD with a <a href="https://franka.de/franka-research-3" target="_blank">Franka Research 3 Robot</a> to perform 4 real-world tasks: 1) pick and place, 2) unplug the charger, 3)
+          pour water, 4) wipe the whiteboard. We collected a dataset with 100 human demonstration trajectories via teleoperation using a SpaceMouse. As shown in the table below, our model achieves competitive performance across all tasks, with notable strengths in tasks requiring precise manipulation, such as pick and place(60%) and wiping the whiteboard (65%).
         </p>
 
         <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0">
@@ -365,45 +374,81 @@
         </table>
       </div>
 
+      <h3 class="title is-3" style="margin-top: 60px;">Video Result Samples</h3>
+      <h4 class="title is-4">RL-Bench</h4>
+      <div class="container">
+        <div id="results-carousel" class="carousel results-carousel">
+          <div class="item item-steve has-text-centered">
+            <video poster="" id="steve video" autoplay controls muted loop playsinline>
+              <source src="static/videos/realman/realman_u3.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item item-steve has-text-centered">
+            <video poster="" id="steve video" autoplay controls muted loop playsinline>
+              <source src="static/videos/realman/realman_u5.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item item-chair-tp has-text-centered">
+            <video poster="" id="chair-tp video" autoplay controls muted loop playsinline height="100%">
+              <source src="static/videos/realman/realman_u1.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item item-chair-tp has-text-centered">
+            <video poster="" id="chair-tp video" autoplay controls muted loop playsinline height="100%">
+              <source src="static/videos/realman/realman_u6.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item item-fullbody has-text-centered">
+            <video poster="" id="fullbody video" autoplay controls muted loop playsinline height="100%">
+              <source src="static/videos/realman/realman_u2.mp4" type="video/mp4">
+              <track kind="subtitles" src="static/vtt/clamp.vtt" srclang="en" label="English" default>
+            </video>
+          </div>
+          <div class="item item-shiba has-text-centered">
+            <video poster="" id="shiba video" autoplay controls muted loop playsinline height="100%">
+              <source src="static/videos/realman/realman_u7.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+        <div style="width: 100%; text-align: center;">Examples of the Franka robot executing tasks involving <i>unseen objects</i>, driven by our MinD.
+        </div>
+      </div>
+      <br />
+
+
+
+
       <h3 class="title is-3" style="margin-top: 30pt;">Ablation Study</h3>
-      <h4 class="title is-5">Action Model Scaling</h4>
+      <h4 class="title is-5">Modality Configurations & Trainable Modules</h4>
       <p>
-        We evaluate various action model architectures on Google Robot (GR) and WidowX Robot (WR) in SIMPLER. The
-        architectures
-        examined include MLPs with depths of 3 and 7 layers, respectively, as well as a
-        series of DiT of varying sizes. The results show that both MLP and DiT structures show improved success rates
-        with increased model
-        size, and DiT significantly outperforms MLP. Notably, DiT-Large achieves the highest average success
-        rate of 64.8%. The average success rate of transformers is approximately linearly related to the logarithm
-        of the model size, indicating a favorable scaling behavior of the action module with diffusion
-        transformers.
+        We evaluate each configuration based on video generation quality (FVD [30]) and success rate (SR)
+        in task execution. The results highlight the impact of key components such as LDP, diffusion modules
+        (LoDiff, DiffMatcher, HiDiff), and loss functions (Lvideo, Lsim, Laction) on performance. It also shows that large-scale video data pretraining and diffusion modules are vital for improving how well our MinD robot framework executes and generates videos. In short, using both video and action data, pretraining, and all the loss functions are key for best results in robot learning.
       </p>
 
       <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0">
         <tr>
-          <td width="25%"></td>
-          <td width="45%">
-            <img src="static/images/ablation-model_size.png" />
+          <td width="9%"></td>
+          <td width="82%">
+            <img src="./static/images/ablation.png" />
+            <p class="has-text-centered" style="margin-top: -0.5em;"> Ablation study results. SE denotes the state encoder, LDP represents large-scale data pretraining, A denotes action and V is video.</p>
           </td>
-          <td width="25%"></td>
-        </tr>
+          <td width="9%"></td>
+          </tr>
       </table>
-      <h4 class="title is-5">Adaptive Action Ensemble</h4>
+      <h4 class="title is-5">Case Study: Can Video Generation Enable Trustworthy VLA?</h4>
       <p>
-        We evaluate the proposed Adaptive Action Ensemble approach against the two ensemble strategies introduced in
-        <a href="https://arxiv.org/abs/2304.13705" target="_blank">ACT</a> – Action Chunking and Temporal Ensemble. The
-        results show that
-        our proposed Adaptive Ensemble outperforms others, and we attribute this to the efficacy of our adaptive
-        similarity
-        weighting between the current and historical predictions.
+        We also conducted case study exploring how video generation models (VGMs) enhance the trustworthiness of world-model-based VLA by enabling risk assessment and outcome prediction for robotic tasks. We demonstrate that VGMs accurately predict both successful and failed executions, offering actionable insights for safer real-world deployment. While effective, future work should aim to improve motion prediction and incorporate richer multimodal inputs for more robust and reliable VLA.
       </p>
       <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0">
         <tr>
-          <td width="25%"></td>
-          <td width="42%">
-            <img src="static/images/ablation-action.png" />
+          <td width="9%"></td>
+          <td width="82%">
+            <img src="./static/images/case_study.png" />
+            <p class="has-text-centered" style="margin-top: -0.5em;"> The left panel shows the confusion matrix, highlighting prediction accuracy for task outcomes. The right panel
+            visualizes a failing case (top) with trajectory misalignment and a successful case (bottom) with accurate prediction.</p>
           </td>
-          <td width="25%"></td>
+          <td width="9%"></td>
         </tr>
       </table>
       <br />
@@ -417,47 +462,35 @@
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
-    <pre><code>@article{park2021nerfies,
-  author    = {Park, Keunhong and Sinha, Utkarsh and Barron, Jonathan T. and Bouaziz, Sofien and Goldman, Dan B and Seitz, Steven M. and Martin-Brualla, Ricardo},
-  title     = {Nerfies: Deformable Neural Radiance Fields},
-  journal   = {ICCV},
-  year      = {2021},
-}</code></pre>
+    <pre>
+      <code>
+        @article{li2024cogact,
+          title={CogACT: A Foundational Vision-Language-Action Model for Synergizing Cognition and Action in Robotic Manipulation},
+          author={Li, Qixiu and Liang, Yaobo and Wang, Zeyu and Luo, Lin and Chen, Xi and Liao, Mozheng and Wei, Fangyun and Deng, Yu and Xu, Sicheng and Zhang, Yizhong and others},
+          journal={arXiv preprint arXiv:2411.19650},
+          year={2024}
+        }
+    </code></pre>
   </div>
 </section>
 
 
 <footer class="footer">
   <div class="container">
-    <div class="content has-text-centered">
-      <a class="icon-link"
-         href="./static/videos/nerfies_paper.pdf">
-        <i class="fas fa-file-pdf"></i>
-      </a>
-      <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
-        <i class="fab fa-github"></i>
-      </a>
-    </div>
     <div class="columns is-centered">
       <div class="column is-8">
         <div class="content">
-          <p>
-            This website is licensed under a <a rel="license"
-                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
-            Commons Attribution-ShareAlike 4.0 International License</a>.
+          <p> Website adapted from <a href="https://github.com/nerfies/nerfies.github.io">NeRFies</a> under a <a
+              href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0
+              International</a>
           </p>
-          <p>
-            This means you are free to borrow the <a
-              href="https://github.com/nerfies/nerfies.github.io">source code</a> of this website,
-            we just ask that you link back to this page in the footer.
-            Please remember to remove the analytics code included in the header of the website which
-            you do not want on your website.
-          </p>
+
         </div>
       </div>
     </div>
   </div>
 </footer>
+
 
 </body>
 </html>
