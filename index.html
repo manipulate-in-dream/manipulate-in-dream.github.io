@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="description"
-        content="Unified Visual Imagination and Control via Hierarchical World Model.">
+        content="Learning A Dual-System World Model for Real-Time Planning and Action Consistency Video Generation.">
   <meta name="keywords" content="MinD, World Model, Video Generation, Robotic Manipulation">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>MinD: Unified Visual Imagination and Control via Hierarchical World Model</title>
+  <title>MinD: Learning A Dual-System World Model for Real-Time Planning and Action Consistency Video Generation</title>
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
@@ -88,7 +88,7 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">MinD: Unified Visual Imagination and Control via Hierarchical World Models</h1>
+          <h1 class="title is-1 publication-title">MinD: Learning A Dual-System World Model for Real-Time Planning and Action Consistency Video Generation</h1>
           <div class="is-size-5 publication-authors">
             <span class="author-block">
               <a href="https://github.com/litwellchi">Xiaowei Chi</a><sup>1,2</sup><sup><sup>*</sup></sup>,
@@ -148,7 +148,7 @@
                 </a>
               </span>
               <span class="link-block">
-                <a href="https://arxiv.org/abs/2011.12948"
+                <a href="https://arxiv.org/abs/2506.18897"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="ai ai-arxiv"></i>
@@ -275,13 +275,13 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            Video generation models (VGMs) offer a promising pathway for unified world modeling in robotics by integrating simulation, prediction, and manipulation. However, their practical application remains limited due to (1) slowgeneration speed, which limits real-time interaction, and (2) poor consistency between imagined videos and executable actions.
+            Recently, Video Generation Models (VGMs) have been widely used as feature extraction backbones for VLA models, leveraging internet-scale pretraining for robust dynamics modeling. However, world models are beyond visual representation encoders; existing methods fail to tap into the potential of their powerful distribution modeling capabilities for predicting future states. This oversight stems from two challenges: integrating generative processes into feature learning is technically challenging and conceptually underdeveloped. Moreover, applying generative world models in robotics is challenging—naively generating future frames through video diffusion is computationally inefficient and unsuitable for real-time control.
           </p>
           <p>
-            To address these challenges, we propose <strong>Manipulate in Dream (MinD)</strong>, a hierarchical diffusion-based world model framework that employs a dual-system design for vision-language manipulation. MinD executes VGM at low frequencies to extract video prediction features, while leveraging a high-frequency diffusion policy for real-time interaction. This architecture enables low-latency, closed-loop control in manipulation with coherent visual guidance.
+            To address these challenges, we introduce <b>Manipulate in Dream (MinD)</b>, a dual-system world model designed for risk-aware planning that enables real-time prediction. MinD runs two asynchronous diffusion processes: a low-frequency visual generator that first creates a future scene, and a high-frequency diffusion policy that then outputs actions. Our key insight is that robotic policies rely not on completely denoised image frames, but instead on low-resolution latents efficiently produced in a single denoising timestep, still serving as an effective future state representation.
           </p>
           <p>
-            To better coordinate the two systems, we introduce a video-action diffusion matching module (DiffMatcher), with a novel co-training strategy that uses separate schedulers for each diffusion model. Specifically, we introduce a diffusion-forcing mechanism to DiffMatcher that aligns their intermediate representations during training, helping the fast action model better understand video-based predictions. Beyond manipulation, MinD also functions as a world simulator, reliably predicting task success or failure in latent space before execution. Trustworthy analysis further shows that VGMs can preemptively evaluate task feasibility and mitigate risks. Extensive experiments across multiple benchmarks demonstrate that MinD achieves state-of-the-art manipulation (63%+) in RL-Bench, advancing the frontier of unified world modeling in robotics.
+            To connect this early prediction to actions, we propose a video-action diffusion matching module (DiffMatcher), with a novel co-training strategy that uses separate schedulers for each diffusion model. Specifically, we introduce a diffusion-forcing mechanism to DiffMatcher that aligns their intermediate representations during training, helping the fast action model better understand video-based predictions. Our method achieves a <b>63\%</b> success rate on RL-Bench, <b>60\%</b> on real-world Franka with <b>11.3</b> FPS, demonstrating that a single-step feature is highly effective for learning control signals. As a significant secondary finding, we demonstrate that MinD can identify 74\% of potential task failures in advance by analyzing generated video clips, while the nascent feature could also serve as an indicator. This provides a valuable, real-time signal for safety monitoring and human intervention.
             </p>
         </div>
       </div>
@@ -336,12 +336,12 @@
       <h3 class="title is-4">Evaluation on RL-Bench</h3>
       <div class="content has-text-justified has-text-centered">
         <p>
-          We first evaluate MinD in the <a href="https://github.com/stepjam/RLBench" target="_blank">RL-Bench</a> evaluation environment. This simulation platform is a comprehensive robot learning benchmark and environment with 7 tasks designed to advance research in vision-guided robot manipulation with a single-arm Franka Panda robot and a front-view camera. We compare MinD with existing VLA models, including <a href="https://arxiv.org/abs/2411.19650" target="_blank">CogACT</a>, <a href="https://arxiv.org/abs/2406.04339" target="_blank">RoboMamba</a>, <a href="https://arxiv.org/html/2404.12377v1" target="_blank">RoboDreamer</a>, and <a href="https://arxiv.org/abs/2406.09246" target="_blank">OpenVLA</a>. For the model using Mamba or LLM as the backbone, we colored it with a green background. We use a yellow background for the VLA models with a video generation backbone, and a red background for our method.
+          We first evaluate MinD in the <a href="https://github.com/stepjam/RLBench" target="_blank">RL-Bench</a> evaluation environment. This simulation platform is a comprehensive robot learning benchmark and environment with 7 tasks designed to advance research in vision-guided robot manipulation with a single-arm Franka Panda robot and a front-view camera. We compare MinD with existing VLA models, including <a href="https://arxiv.org/abs/2411.19650" target="_blank">CogACT</a>, <a href="https://arxiv.org/abs/2406.04339" target="_blank">RoboMamba</a>, <a href="https://arxiv.org/html/2404.12377v1" target="_blank">RoboDreamer</a>, <a href="https://arxiv.org/abs/2410.24164" target="_blank">π-0</a>, <a href="https://arxiv.org/abs/2412.14803" target="_blank">Video Prediction Policy(VPP)</a> and <a href="https://arxiv.org/abs/2406.09246" target="_blank">OpenVLA</a>. For the model using Mamba or LLM as the backbone, we colored it with a green background. We use a yellow background for the VLA models with a video generation backbone, and a red background for our method.
         </p>
         <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0">
           <tr>
             <td width="12%"></td>
-            <td width="76%">
+            <td width="90%">
               <img src="static/images/exp_rlbench.png" />
               <p class="has-text-centered" style="margin-top: -0.5em;">
                 Evaluation and comparison on RL-Bench tasks. All models are finetuned on the collected 1000 trajectories <span style="font-size: 80%;">(including 100 trajectories for each 7 tasks and 300 more randomly sampled tasks).</span>
@@ -351,23 +351,22 @@
           </tr>
         </table>
         <p>
-            The results show that MinD outperforms all the existing VLA models, especially in tasks requiring complex temporal reasoning, such as "<b>Sweep to Dustpan</b>" (<span style="font-weight:bold;">96%</span>) and "<b>Close Laptop Lid</b>" (<span style="font-weight:bold;">68%</span>), highlighting the strong capability of video generation models as the foundational backbone for comprehensive visual-language manipulations. Besides, MinD also achieves the highest inference speed of <b>11.3</b> FPS, showcasing its superior efficiency.
+            The results show that MinD outperforms all the existing VLA models, especially in tasks requiring complex temporal reasoning, such as "<b>Sweep to Dustpan</b>" (<span style="font-weight:bold;">96%</span>) and "<b>Close Laptop Lid</b>" (<span style="font-weight:bold;">68%</span>), highlighting the strong capability of video generation models as the foundational backbone for comprehensive visual-language manipulations. Besides, MinD also achieves a competitive inference speed of <b>11.3</b> FPS, showcasing its superior efficiency.
         </p>
       </div>
 
       <h3 class="title is-4">Real-world Evaluation with Franka Research 3 Robot</h3>
       <div class="content has-text-justified has-text-centered">
         <p>
-          We evaluate MinD with a <a href="https://franka.de/franka-research-3" target="_blank">Franka Research 3 Robot</a> to perform 4 real-world tasks: 1) pick and place, 2) unplug the charger, 3)
-          pour water, 4) wipe the whiteboard. We collected a dataset with 100 human demonstration trajectories via teleoperation using a SpaceMouse. As shown in the table below, our model achieves competitive performance across all tasks, with notable strengths in tasks requiring precise manipulation, such as pick and place(60%) and wiping the whiteboard (65%).
+          We evaluate MinD with a <a href="https://franka.de/franka-research-3" target="_blank">Franka Research 3 Robot</a> to perform 3 kinds of real-world tasks: 1) a pick-and-place task (e.g., placing a cube into a bowl or a croissant into a basket), 2) unplugging the charger, and 3) wiping the whiteboard}. We collected a dataset with 100 human demonstration trajectories via teleoperation using a SpaceMouse. As shown in the table below, the performance of MinD consistently surpasses those of other VLA models, represented by OpenVLA, and VGM-based world models, such as VPP. Notably, while VPP also shows competitive results on the long-horizon task of wiping whiteboard, our model attains superior performance and operates at a higher control frequency. This is attributed to our <b>DiffMatcher design</b>, which preserves the characteristics of both fast and slow systems, enabling a tighter coupling between prediction and execution.
         </p>
 
         <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0">
           <tr>
             <td width="9%"></td>
-            <td width="82%">
+            <td width="85%">
               <img src="./static/images/exp_franka.png" />
-              <p class="has-text-centered" style="margin-top: -0.5em;"> Real-world evaluation with the Franka robot across four tasks, each with 20 trials of random configurations.</p>
+              <p class="has-text-centered" style="margin-top: -0.5em;"> Real-world evaluation with Franka robot across four tasks, each with 20 rollouts using the latest checkpoints across varied tabletop positions</p>
             </td>
             <td width="9%"></td>
           </tr>
@@ -471,15 +470,14 @@
       <h4 class="title is-5">Case Study: Can Video Generation Enable Trustworthy VLA?</h4>
       <div class="content has-text-justified has-text-centered">
       <p>
-        We also conducted case study exploring how video generation models (VGMs) enhance the trustworthiness of world-model-based VLA by enabling risk assessment and outcome prediction for robotic tasks. We demonstrate that VGMs can predict both successful and failed executions, offering actionable insights for safer real-world deployment. While effective, future work should aim to improve motion prediction and incorporate richer multimodal inputs for more robust and reliable VLA.
+        We also conducted case study exploring how video generation models (VGMs) enhance the trustworthiness of world-model-based VLA by enabling risk assessment and outcome prediction for robotic tasks. We demonstrate that VGMs can predict both successful and failed executions, offering actionable insights for safer real-world deployment. Beyond visual inspection and human evaluation, we further analyze the latent features via PCA, a single-step feature that is used for HiDiff-Policy. We observe clear distributional differences between successful and failed predictions, indicating that the latent representations encode uncertainty relevant to task outcomes. This supports the potential of modeling VLA with a dual-system perspective: fast, high-level alignment from textual goals to actions, and slow, generative simulation for dynamic risk estimation.
       </p>
       <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0">
         <tr>
           <td width="9%"></td>
-          <td width="82%">
-            <img src="./static/images/case_study.png" />
-            <p class="has-text-centered" style="margin-top: -0.5em;"> The left panel shows the confusion matrix, highlighting prediction accuracy for task outcomes. The right panel
-            visualizes a failing case (top) with trajectory misalignment and a successful case (bottom) with accurate prediction.</p>
+          <td width="90%">
+            <img src="./static/images/risk_pca.png" />
+            <p class="has-text-centered" style="margin-top: -0.5em;"> The left panel visualizes failing cases (left) with misaligned generated video clips and corresponding successful cases (right) with accurate predictions. The middle panel shows the confusion matrix of our human evaluation. The right panel showcases the PCA result of the single-step predictive visual feature.</p>
           </td>
           <td width="9%"></td>
         </tr>
